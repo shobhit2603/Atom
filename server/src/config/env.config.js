@@ -23,4 +23,5 @@ export const config = {
   accessTokenExpiry: process.env.ACCESS_TOKEN_EXPIRY || "1d",
   refreshTokenExpiry: process.env.REFRESH_TOKEN_EXPIRY || "10d",
   nodeEnv: process.env.NODE_ENV || "development",
+  clientUrl: process.env.CLIENT_URL || "http://localhost:3000",
 };

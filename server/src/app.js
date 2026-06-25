@@ -4,12 +4,13 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { config } from "./config/env.config.js";
 import authRouter from "./routes/auth.routes.js";
+import passport from "passport";
 
 const app = express();
 
 app.use(
   cors({
-    origin: config.FRONTEND_URL,
+    origin: config.clientUrl,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
   }),
@@ -23,5 +24,18 @@ app.use(express.static("public"));
 
 // routes declaration
 app.use("/api/v1/auth", authRouter);
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+
+  res.status(statusCode).json({
+    success: false,
+    message,
+    errors: err.errors || [],
+    stack: config.nodeEnv === "development" ? err.stack : undefined,
+  });
+});
 
 export default app;
